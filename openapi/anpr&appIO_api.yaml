@@ -1,0 +1,398 @@
+openapi: 3.0.1
+info:
+  title: ANPR/AppIO - Integrazione AppIO
+  description: |-
+    API rese disponibili da ANPR/AppIO al Catalogo delle API previsto nel modello di interoperabilità delle pubbliche amministrazioni accessibile da INAD.
+  contact:
+    name: AgID - Agenzia per l'Italia Digitale
+    url: https://www.agid.gov.it/
+  license:
+    name: CC BY-NC-SA 4.0
+    url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+  version: 1.0.0
+servers:
+  - url: xxxxxxxx
+    description: Generated server url
+tags:
+- name: bulk
+  description: Operazioni su più di un domicilio.
+- name: cittadino
+  description: Operazioni su un singolo cittadino.
+paths:
+  /receive_status_change/{codice_fiscale}:
+    post:
+      operationId: receive_status_change
+      tags:
+        - cittadino
+      description: |-
+        Notifica lo stato di un CITTADINO identificativo tramite il codice fiscale.
+      parameters:
+        - name: codice_fiscale
+          in: path
+          required: true
+          description: codice fiscale del CITTADINO
+          schema:
+            $ref: '#/components/schemas/Codice_Fiscale'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotifyStatus'
+      security:
+        - bearerAuth: []
+          Agid-JWS-Signature: []
+      responses:
+        '200':
+          description: aggiornamento effettuato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ACK'
+          headers:
+            Agid-JWS-Signature:
+              $ref: '#/components/headers/Agid-JWS-Signature'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        '503':
+          $ref: '#/components/responses/503'
+
+  /receive_changed_email/{codice_fiscale}:
+    post:
+      operationId: receive_changed_email
+      tags:
+        - cittadino
+      description: |-
+        Notifica la nuova mail associata a un CITTADINO identificativo tramite il codice fiscale.
+      parameters:
+        - name: codice_fiscale
+          in: path
+          required: true
+          description: codice fiscale del CITTADINO
+          schema:
+            $ref: '#/components/schemas/Codice_Fiscale'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotifyEmail'
+
+      security:
+        - bearerAuth: []
+          Agid-JWS-Signature: []
+
+      responses:
+        '200':
+          description: aggiornamento effettuato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ACK'
+          headers:
+            Agid-JWS-Signature:
+              $ref: '#/components/headers/Agid-JWS-Signature'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        '503':
+          $ref: '#/components/responses/503'
+
+  /receive_changed_digital_addresses:
+    post:
+      description: ricevi variazioni di domicili digitali delle ultime 24h
+      operationId: receive_changed_digital_addresses
+      tags:
+      - bulk
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Response_List_Changed_Digital_Address'
+
+      security:
+        - bearerAuth: []
+          Agid-JWS-Signature: []
+
+      responses:
+        '200':
+          description: aggiornamento effettuato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ACK'
+          headers:
+            Agid-JWS-Signature:
+              $ref: '#/components/headers/Agid-JWS-Signature'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        '503':
+          $ref: '#/components/responses/503'
+
+
+components:
+  headers:
+    Agid-JWS-Signature:
+      description: |-
+        L'header Agid-JWS-Signature è un JWS (JSON Web Signature) che contiene una firma digitale
+        associata al messaggio scambiato.
+        Vedi il pattern di sicurezza [INTEGRITY_REST_01] del MoDI
+
+      schema:
+        type: string
+        format: JWS
+        maxLength: 4096
+        example: eyJzd.fafa.fafafa
+  responses:
+    NotificaRicevuta:
+      description: Notifica ricevuta correttamente.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ACK'
+    '400':
+      description: BAD_REQUEST
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Errore'
+    '401':
+      description: UNAUTHORIZED
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Errore'
+    '403':
+      description: FORBIDDEN
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Errore'
+    '404':
+      description: NOT_FOUND
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Errore'
+    '500':
+      description: INTERNAL_SERVER_ERROR
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Errore'
+    '503':
+      description: SERVICE_UNAVAILABLE
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Errore'
+  schemas:
+    NotifyStatus:
+      type: object
+      additionalProperties: false
+      description: |-
+        La notifica di variazione dello status di un CITTADINO.
+
+        La notifica contiene l'identificativo ed il codice della richiesta
+        originariamente fatta dal CITTADINO.
+      required:
+        - id_request
+        - request_code
+        - citizen_status
+        - reason
+      properties:
+        id_request:
+            $ref: '#/components/schemas/ID_Request'
+        citizen_status:
+          $ref: '#/components/schemas/Citizen_Status'
+        reason:
+          $ref: '#/components/schemas/Citizen_Change_Status_Reason'
+        request_code:
+          $ref: '#/components/schemas/Request_Code'
+    NotifyEmail:
+      type: object
+      additionalProperties: false
+      description: |-
+        La notifica di variazione della email di contatto di un CITTADINO.
+
+        NOTA: a differenza di `NotifyStatus` la notifica contiene
+        l'identificativo della richiesta ma non il codice della richiesta.
+      required:
+        - id_request
+        - email
+      properties:
+        email:
+            $ref: '#/components/schemas/Email'
+        id_request:
+            $ref: '#/components/schemas/ID_Request'
+
+
+    Errore:
+      required:
+        - status
+        - title
+      type: object
+      additionalProperties: false
+      description: Modello di risposta in caso di errore
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: Codice di errore
+          example: 400
+          maximum: 600
+          minimum: 100
+        title:
+          type: string
+          description: Tipologia di errore
+          example: BAD_REQUEST
+          enum:
+            - BAD_REQUEST
+            - UNAUTHORIZED
+            - FORBIDDEN
+            - NOT_FOUND
+            - INTERNAL_SERVER_ERROR
+            - SERVICE_UNAVAILABLE
+        detail:
+          type: string
+          description: Descrizione di dettaglio dello specifico problema verificatosi
+          example: <detail_error>
+          maxLength: 1024
+    ID_Request:
+        type: string
+        pattern: ^INAD_[0-9]{8,8}_[0-9]{10,10}
+        description: identificativo unico della request composto da ANPR come indicazione del sistema che ha effettuato la richiesta, aaaammdd data di riferimento e nnnnnnnnnn progressivo della richiesta
+
+    Codice_Fiscale:
+      type: string
+      pattern: /^(?:[A-Z][AEIOU][AEIOUX]|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}(?:[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[15MR][\dLMNP-V]|[26NS][0-8LMNP-U])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM]|[AC-EHLMPR-T][26NS][9V])|(?:[02468LNQSU][048LQU]|[13579MPRTV][26NS])B[26NS][9V])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[1-9MNP-V][\dLMNP-V]|[0L][1-9MNP-V]))[A-Z]$/i
+
+    Citizen_Status:
+      type: string
+      enum:
+        - citizenNotPresent
+        - digitalDomicileNotPresent
+        - inCharge
+        - verify
+        - confirmationRequestSent
+        - awaitingPublication
+        - waitingOfficeCancellation
+        - digitalDomicilePresent
+
+    Email:
+      type: string
+      pattern: ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+
+    Digital_Address:
+      $ref: '#/components/schemas/Email'
+
+    Request_Code:
+      type: string
+      pattern: ^(INAD|ANPR|APPIO)_[0-9]{10,10}
+
+    ACK:
+      type: object
+      required:
+        - description
+        - id_request
+      properties:
+        description:
+          type: string
+          enum:
+            - chargeMade
+        id_request:
+          $ref: '#/components/schemas/ID_Request'
+
+    Citizen_Change_Status_Reason:
+      type: string
+      enum:
+        - citizenRegistration
+        - electionRequest
+        - changeRequest
+        - voluntaryCancellationRequest
+        - startVerification
+        - OKVerificationForElection
+        - OKVerificationForChange
+        - KOVerificationForElection
+        - KOVerificationForChange
+        - electionConfirmed
+        - changeConfirmed
+        - after90dd
+        - electionAbolition
+        - changeAbolition
+        - electionPubblished
+        - changePubblished
+        - voluntaryCancellationPubblished
+        - officeCancellationPubblished
+        - officeCancellation
+        - after30dd
+        - specialCaseCancellation
+
+    List_Changed_Digital_Address:
+      type: array
+      items:
+        type: object
+        required:
+          - codice_fiscale
+          - action
+        properties:
+          codice_fiscale:
+            $ref: '#/components/schemas/Codice_Fiscale'
+          digital_address:
+            $ref: '#/components/schemas/Digital_Address'
+          action:
+            type: string
+            enum:
+              - insert
+              - update
+              - delete
+    Response_List_Changed_Digital_Address:
+      type: object
+      required:
+        - id_request
+        - list_changed_digital_address
+      properties:
+        id_request:
+          $ref: '#/components/schemas/ID_Request'
+        list_changed_digital_address:
+          $ref: '#/components/schemas/List_Changed_Digital_Address'
+
+  securitySchemes:
+    bearerAuth:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      description: |-
+        Implementazione conforme ad RFC8725.
+    Agid-JWS-Signature:
+      type: apiKey
+      in: header
+      name: Agid-JWS-Signature
+      description: |-
+        Header della firma di JWS.
+        Il valore di questo header è una firma JWS.
+        Vedere Modi  [integrity_rest_01] Integrità del payload del messaggio REST
