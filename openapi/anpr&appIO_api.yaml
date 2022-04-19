@@ -352,24 +352,6 @@ components:
         - after30dd
         - specialCaseCancellation
 
-    List_Changed_Digital_Address:
-      type: array
-      items:
-        type: object
-        required:
-          - codice_fiscale
-          - action
-        properties:
-          codice_fiscale:
-            $ref: '#/components/schemas/Codice_Fiscale'
-          digital_address:
-            $ref: '#/components/schemas/Digital_Address'
-          action:
-            type: string
-            enum:
-              - insert
-              - update
-              - delete
     Response_List_Changed_Digital_Address:
       type: object
       required:
