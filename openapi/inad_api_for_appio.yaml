@@ -3,6 +3,10 @@ info:
   title: INAD - Integrazione AppIO
   description: |-
     API rese disponibili da INAD al Catalogo delle API previsto nel modello di interoperabilità delle pubbliche amministrazioni accessibile da AppIO.
+    
+    Pattern Model applicati:
+    - [ID_AUTH_CHANNEL_01] Direct Trust Transport-Level Security
+    - [BLOCK_REST] Blocking REST
   contact:
     name: AgID - Agenzia per l'Italia Digitale
     url: https://www.agid.gov.it/
@@ -11,12 +15,12 @@ info:
     url: https://creativecommons.org/licenses/by-nc-sa/4.0/
   version: 1.0.0
 servers:
-  - url: https://api.inad.gov.it/rest/inad/v1/integration_ANPR_AppIO
+  - url: https://apiappio.inad.gov.it/rest/inad/v1/integration
     description: Generated server url
 tags:
-- name: cittadino
+- name: Cittadino
   description: Opeazioni su un singolo cittadino.
-- name: bulk
+- name: Bulk
   description: Opeazioni su una serie di cittadini.
 
 paths:
@@ -25,7 +29,7 @@ paths:
       description: verifica lo stato di un CITTADINO
       operationId: status_check
       tags:
-      - cittadino
+      - Cittadino
       parameters:
         - name: codice_fiscale
           in: path
@@ -38,10 +42,6 @@ paths:
           schema:
             $ref: '#/components/schemas/ID_Request'
 
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
-
       responses:
         '200':
           description: riscontro sullo stato del CITTADINO
@@ -49,9 +49,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response_Citizen_Status'
-          headers:
-            Agid-JWS-Signature:
-              $ref: '#/components/headers/Agid-JWS-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -72,7 +69,7 @@ paths:
         volontaria del dominicio digitale di un CITTADINO
       operationId: request_action
       tags:
-      - cittadino
+      - Cittadino
 
       parameters:
         - name: codice_fiscale
@@ -81,10 +78,6 @@ paths:
           description: codice fiscale del CITTADINO per cui è chiesta l'azione
           schema:
             $ref: '#/components/schemas/Codice_Fiscale'
-
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
 
       requestBody:
         required: true
@@ -100,9 +93,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response_Effect_Action'
-          headers:
-            Agid-JWS-Signature:
-              $ref: '#/components/headers/Agid-JWS-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -121,7 +111,7 @@ paths:
       description: richiesta di cambiamento email di contatto di un CITTADINO
       operationId: change_email
       tags:
-      - cittadino
+      - Cittadino
 
       parameters:
         - name: codice_fiscale
@@ -130,9 +120,7 @@ paths:
           description: codice fiscale del CITTADINO per cui è richiesto l'aggiornamento della email di contatto
           schema:
             $ref: '#/components/schemas/Codice_Fiscale'
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
+
       requestBody:
         required: true
         content:
@@ -146,9 +134,6 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/ACK'
-            headers:
-              Agid-JWS-Signature:
-                $ref: '#/components/headers/Agid-JWS-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -166,7 +151,7 @@ paths:
       description: recupera variazioni domicili digitali digitali ad uno specifico giorno
       operationId: recovers_changed_digital_addresses
       tags:
-      - bulk
+      - Bulk
       parameters:
         - name: since
           in: query
@@ -182,10 +167,6 @@ paths:
           schema:
             $ref: '#/components/schemas/ID_Request'
 
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
-
       responses:
         '200':
           description: lista dei domicili digitali modificati nello specifico giorno
@@ -193,9 +174,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response_List_Changed_Digital_Address'
-          headers:
-            Agid-JWS-Signature:
-              $ref: '#/components/headers/Agid-JWS-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -214,7 +192,7 @@ paths:
       description: richiesta del domicilio digitale di un CITTADINO
       operationId: get_digital_address
       tags:
-      - cittadino
+      - Cittadino
       parameters:
         - name: codice_fiscale
           in: path
@@ -227,9 +205,6 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/ID_Request'
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
 
       responses:
         '200':
@@ -238,9 +213,6 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Response_Digital_Address'
-            headers:
-              Agid-JWS-Signature:
-                $ref: '#/components/headers/Agid-JWS-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -260,16 +232,13 @@ paths:
         Richiede l'abbandono dell'applicazione IO per un CITTADINO.
       operationId: appIO_abandonment
       tags:
-      - cittadino
+      - Cittadino
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/AbbandonaIO'
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
 
       responses:
         '200':
@@ -291,21 +260,7 @@ paths:
         '503':
           $ref: '#/components/responses/503'
 
-
-
 components:
-  headers:
-    Agid-JWS-Signature:
-      description: |-
-        L'header Agid-JWS-Signature è un JWS (JSON Web Signature) che contiene una firma digitale
-        associata al messaggio scambiato.
-        Vedi il pattern di sicurezza [INTEGRITY_REST_01] del MoDI
-
-      schema:
-        type: string
-        format: JWS
-        maxLength: 4096
-        example: eyJzd.fafa.fafafa
   responses:
     NotificaRicevuta:
       description: Notifica ricevuta correttamente.
@@ -567,11 +522,5 @@ components:
       type: http
       description: |-
         Implementazione conforme ad RFC8725.
-    Agid-JWS-Signature:
-      type: apiKey
-      in: header
-      name: Agid-JWS-Signature
-      description: |-
-        Header della firma di JWS.
-        Il valore di questo header è una firma JWS.
-        Vedere Modi  [integrity_rest_01] Integrità del payload del messaggio REST
+security:
+  - bearerAuth: []
