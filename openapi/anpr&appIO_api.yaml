@@ -378,8 +378,12 @@ components:
       properties:
         id_request:
           $ref: '#/components/schemas/ID_Request'
-        list_changed_digital_address:
-          $ref: '#/components/schemas/List_Changed_Digital_Address'
+        since_list_changed_digital_address:        
+          description: |-
+            data di riferimento delle variazioni dei domicili digitali disponibili          
+          type: string
+          format: date
+          example: '2020-01-01'
 
   securitySchemes:
     bearerAuth:
@@ -388,6 +392,7 @@ components:
       type: http
       description: |-
         Implementazione conforme ad RFC8725.
+        Contiene il JWT recuperato da PDND interoperabilità applicando le Linee Guida sull’infrastruttura tecnologica della Piattaforma Digitale Nazionale Dati per l’interoperabilità dei sistemi informativi e delle basi di dati ai sensi dell’articolo 50-ter, comma 2 del CAD 
     Agid-JWS-Signature:
       type: apiKey
       in: header
