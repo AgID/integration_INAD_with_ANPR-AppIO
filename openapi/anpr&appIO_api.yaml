@@ -359,7 +359,7 @@ components:
       required:
         - id_request
         - list_changed_digital_address
-        - row_number
+        - total_element
       properties:
         id_request:
           $ref: '#/components/schemas/ID_Request'
@@ -369,7 +369,7 @@ components:
           type: string
           format: date
           example: '2020-01-01'
-        row_number:
+        total_element:
           type: integer
 
   securitySchemes:
