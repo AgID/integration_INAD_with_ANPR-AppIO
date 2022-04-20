@@ -3,6 +3,11 @@ info:
   title: INAD - Integrazione ANPR
   description: |-
     API rese disponibili da INAD al Catalogo delle API previsto nel modello di interoperabilità delle pubbliche amministrazioni accessibile da ANPR.
+    
+    Pattern Model applicati:
+    - [ID_AUTH_CHANNEL_01] Direct Trust Transport-Level Security
+    - [BLOCK_REST] Blocking REST
+    - [INTEGRITY_REST_01] Integrità del payload messaggio REST
   contact:
     name: AgID - Agenzia per l'Italia Digitale
     url: https://www.agid.gov.it/
@@ -11,25 +16,25 @@ info:
     url: https://creativecommons.org/licenses/by-nc-sa/4.0/
   version: 1.0.0
 servers:
-  - url: https://api.inad.gov.it/rest/inad/v1/integration_ANPR_AppIO
+  - url: https://apianpr.inad.gov.it/rest/inad/v1/integration
     description: Generated server url
 tags:
-- name: cittadino
+- name: Cittadino
   description: Opeazioni su un singolo cittadino.
-- name: bulk
+- name: Bulk
   description: Opeazioni su una serie di cittadini.
 paths:
   /status_check/{codice_fiscale}:
     get:
-      description: verifica lo stato di un CITTADINO
+      description: Verifica lo stato di un CITTADINO
       tags:
-        - cittadino
+        - Cittadino
       operationId: status_check
       parameters:
         - name: codice_fiscale
           in: path
           required: true
-          description: codice fiscale del CITTADINO per cui è chiesta verifica dello stato
+          description: Codice fiscale del CITTADINO per cui è chiesta verifica dello stato
           schema:
             $ref: '#/components/schemas/Codice_Fiscale'
         - name: id_request
@@ -37,13 +42,9 @@ paths:
           schema:
             $ref: '#/components/schemas/ID_Request'
 
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
-
       responses:
         '200':
-          description: riscontro sullo stato del CITTADINO
+          description: Riscontro sullo stato del CITTADINO
           content:
             application/json:
               schema:
@@ -67,23 +68,18 @@ paths:
   /request_action/{codice_fiscale}:
     post:
       description: |-
-        richiesta di avvio azione di elezione, modifica o cancellazione
-        volontaria del dominicio digitale di un CITTADINO
+        Richiesta di avvio azione di elezione, modifica o cancellazione volontaria del dominicio digitale di un CITTADINO
       operationId: request_action
       tags:
-      - cittadino
+      - Cittadino
 
       parameters:
         - name: codice_fiscale
           in: path
           required: true
-          description: codice fiscale del CITTADINO per cui è chiesta l'azione
+          description: Codice fiscale del CITTADINO per cui è chiesta l'azione
           schema:
             $ref: '#/components/schemas/Codice_Fiscale'
-
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
 
       requestBody:
         required: true
@@ -94,7 +90,7 @@ paths:
 
       responses:
         '200':
-          description: conferma di presa in carico dell'azione richiesta
+          description: Conferma di presa in carico dell'azione richiesta
           content:
             application/json:
               schema:
@@ -117,21 +113,19 @@ paths:
 
   /change_email/{codice_fiscale}:
     post:
-      description: richiesta di cambiamento email di contatto di un CITTADINO
+      description: Richiesta di cambiamento email di contatto di un CITTADINO
       operationId: change_email
       tags:
-      - cittadino
+      - Cittadino
 
       parameters:
         - name: codice_fiscale
           in: path
           required: true
-          description: codice fiscale del CITTADINO per cui è richiesto l'aggiornamento della email di contatto
+          description: Codice fiscale del CITTADINO per cui è richiesto l'aggiornamento della email di contatto
           schema:
             $ref: '#/components/schemas/Codice_Fiscale'
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
+          
       requestBody:
         required: true
         content:
@@ -140,7 +134,7 @@ paths:
               $ref: '#/components/schemas/NotifyEmail'
       responses:
         '200':
-            description: conferma di variazione dell'email di contatto del CITTADINO
+            description: Conferma di variazione dell'email di contatto del CITTADINO
             content:
               application/json:
                 schema:
@@ -163,16 +157,16 @@ paths:
 
   /recovers_changed_digital_addresses:
     get:
-      description: recupera variazioni domicili digitali digitali ad uno specifico giorno
+      description: Recupera variazioni domicili digitali digitali ad uno specifico giorno
       operationId: recovers_changed_digital_addresses
       tags:
-      - bulk
+      - Bulk
       parameters:
         - name: since
           in: query
           required: true
           description: |-
-            data di riferimento delle variazioni dei domicili digitali richieste
+            Data di riferimento delle variazioni dei domicili digitali richieste
           schema:
             type: string
             format: date
@@ -182,13 +176,9 @@ paths:
           schema:
             $ref: '#/components/schemas/ID_Request'
 
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
-
       responses:
         '200':
-          description: lista dei domicili digitali modificati nello specifico giorno
+          description: Lista dei domicili digitali modificati nello specifico giorno
           content:
             application/json:
               schema:
@@ -213,10 +203,9 @@ paths:
     get:
       operationId: sync_digital_addresses
       tags:
-        - bulk
+        - Bulk
       description: |-
-        recupera domicili digitali dei CITTADINI registrati in INAD
-        a partire dall'identificativo di una particolare richiesta.
+        Recupera domicili digitali dei CITTADINI registrati in INAD a partire dall'identificativo di una particolare richiesta.
 
       parameters:
         - name: id_request
@@ -224,14 +213,25 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/ID_Request'
-
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
+        - name: page_number
+          required: true
+          in: query
+          description: |-
+            The page number to request
+          schema:
+            $ref: '#/components/schemas/Page_Number'
+        - name: page_size
+          required: true
+          in: query
+          description: |-
+            The numbers of items to return
+          example: 100
+          schema:
+            $ref: '#/components/schemas/Page_Size'
 
       responses:
         '200':
-          description: lista dei domicili digitali eletti in INAD
+          description: Lista dei domicili digitali eletti in INAD
           content:
             application/json:
               schema:
@@ -254,9 +254,9 @@ paths:
 
   /death_notification:
     post:
-      description: notifica di decesso del CITTADINO
+      description: Notifica di decesso del CITTADINO
       tags:
-      - cittadino
+      - Cittadino
       operationId: death_notification
       requestBody:
         required: true
@@ -277,10 +277,6 @@ paths:
                   $ref: '#/components/schemas/Codice_Fiscale'
                 id_request:
                   $ref: '#/components/schemas/ID_Request'
-
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
 
       responses:
         '200':
@@ -413,6 +409,46 @@ components:
         type: string
         pattern: ^ANPR_[0-9]{8,8}_[0-9]{10,10}
         description: identificativo unico della request composto da ANPR come indicazione del sistema che ha effettuato la richiesta, aaaammdd data di riferimento e nnnnnnnnnn progressivo della richiesta
+        
+    Page_Number:
+        type: integer
+        default: 0
+        description: Zero-based page index (0..N)
+        
+    Page_Size:
+        type: integer
+        minimum: 1
+        maximum: 10000
+        description: The size of the page to be returned
+        
+    Pagination:
+      type: object
+      required:
+        - current_page
+        - page_size
+        - total_pages
+        - total_elements
+      properties:
+        current_page:
+          type: integer
+          format: int32
+          description: The current page in the list
+          example: 5
+        page_size:
+          type: integer
+          format: int32
+          description: The current page size
+          example: 20
+        total_pages:
+          type: integer
+          format: int32
+          description: The total number of pages in the list
+          example: 112
+        total_elements:
+          type: integer
+          format: int32
+          description: The total number of records in the list
+          example: 500
 
     Codice_Fiscale:
       type: string
@@ -565,11 +601,14 @@ components:
         required:
           - id_request
           - list_digital_address
+          - pagination
         properties:
           id_request:
             $ref: '#/components/schemas/ID_Request'
           list_digital_address:
             $ref: '#/components/schemas/List_Digital_Address'
+          pagination:
+            $ref: '#/components/schemas/Pagination'
 
   securitySchemes:
     bearerAuth:
@@ -585,4 +624,7 @@ components:
       description: |-
         Header della firma di JWS.
         Il valore di questo header è una firma JWS.
-        Vedere Modi  [integrity_rest_01] Integrità del payload del messaggio REST
+        Vedere Modi [integrity_rest_01] Integrità del payload del messaggio REST
+security:
+  - bearerAuth: []
+    Agid-JWS-Signature: []
