@@ -3,6 +3,12 @@ info:
   title: ANPR/AppIO - Integrazione AppIO
   description: |-
     API rese disponibili da ANPR/AppIO al Catalogo delle API previsto nel modello di interoperabilità delle pubbliche amministrazioni accessibile da INAD.
+
+    Pattern Model applicati:
+    - [ID_AUTH_CHANNEL_01] Direct Trust Transport-Level Security
+    - [BLOCK_REST] Blocking REST
+    - [INTEGRITY_REST_01] Integrità del payload messaggio REST
+    
   contact:
     name: AgID - Agenzia per l'Italia Digitale
     url: https://www.agid.gov.it/
@@ -39,9 +45,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/NotifyStatus'
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
+     
       responses:
         '200':
           description: aggiornamento effettuato
@@ -86,9 +90,7 @@ paths:
             schema:
               $ref: '#/components/schemas/NotifyEmail'
 
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
+     
 
       responses:
         '200':
@@ -115,7 +117,7 @@ paths:
 
   /receive_changed_digital_addresses:
     post:
-      description: ricevi variazioni di domicili digitali delle ultime 24h
+      description: Ricevi disponibilità variazioni di domicili digitali delle ultime 24h
       operationId: receive_changed_digital_addresses
       tags:
       - bulk
@@ -126,10 +128,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Response_List_Changed_Digital_Address'
 
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
-
+    
       responses:
         '200':
           description: aggiornamento effettuato
@@ -153,6 +152,9 @@ paths:
         '503':
           $ref: '#/components/responses/503'
 
+security:
+  - bearerAuth: []
+    Agid-JWS-Signature: []
 
 components:
   headers:
@@ -352,34 +354,23 @@ components:
         - after30dd
         - specialCaseCancellation
 
-    List_Changed_Digital_Address:
-      type: array
-      items:
-        type: object
-        required:
-          - codice_fiscale
-          - action
-        properties:
-          codice_fiscale:
-            $ref: '#/components/schemas/Codice_Fiscale'
-          digital_address:
-            $ref: '#/components/schemas/Digital_Address'
-          action:
-            type: string
-            enum:
-              - insert
-              - update
-              - delete
     Response_List_Changed_Digital_Address:
       type: object
       required:
         - id_request
         - list_changed_digital_address
+        - total_element
       properties:
         id_request:
           $ref: '#/components/schemas/ID_Request'
-        list_changed_digital_address:
-          $ref: '#/components/schemas/List_Changed_Digital_Address'
+        since_list_changed_digital_address:        
+          description: |-
+            data di riferimento delle variazioni dei domicili digitali disponibili          
+          type: string
+          format: date
+          example: '2020-01-01'
+        total_element:
+          type: integer
 
   securitySchemes:
     bearerAuth:
@@ -388,6 +379,7 @@ components:
       type: http
       description: |-
         Implementazione conforme ad RFC8725.
+        Contiene il JWT recuperato da PDND interoperabilità applicando le Linee Guida sull’infrastruttura tecnologica della Piattaforma Digitale Nazionale Dati per l’interoperabilità dei sistemi informativi e delle basi di dati ai sensi dell’articolo 50-ter, comma 2 del CAD 
     Agid-JWS-Signature:
       type: apiKey
       in: header

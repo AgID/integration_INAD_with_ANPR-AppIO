@@ -567,6 +567,7 @@ components:
       type: http
       description: |-
         Implementazione conforme ad RFC8725.
+        Contiene il JWT recuperato da PDND interoperabilità applicando le Linee Guida sull’infrastruttura tecnologica della Piattaforma Digitale Nazionale Dati per l’interoperabilità dei sistemi informativi e delle basi di dati ai sensi dell’articolo 50-ter, comma 2 del CAD 
     Agid-JWS-Signature:
       type: apiKey
       in: header
