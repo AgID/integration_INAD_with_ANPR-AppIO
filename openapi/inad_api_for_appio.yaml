@@ -3,6 +3,11 @@ info:
   title: INAD - Integrazione AppIO
   description: |-
     API rese disponibili da INAD al Catalogo delle API previsto nel modello di interoperabilità delle pubbliche amministrazioni accessibile da AppIO.
+    
+    Pattern Model applicati:
+    - [ID_AUTH_CHANNEL_01] Direct Trust Transport-Level Security
+    - [BLOCK_REST] Blocking REST
+    - [INTEGRITY_REST_01] Integrità del payload messaggio REST
   contact:
     name: AgID - Agenzia per l'Italia Digitale
     url: https://www.agid.gov.it/
@@ -11,26 +16,26 @@ info:
     url: https://creativecommons.org/licenses/by-nc-sa/4.0/
   version: 1.0.0
 servers:
-  - url: https://api.inad.gov.it/rest/inad/v1/integration_ANPR_AppIO
+  - url: https://apiappio.inad.gov.it/rest/inad/v1/integration
     description: Generated server url
 tags:
-- name: cittadino
-  description: Opeazioni su un singolo cittadino.
-- name: bulk
-  description: Opeazioni su una serie di cittadini.
+- name: Cittadino
+  description: Operazioni su un singolo cittadino.
+- name: Bulk
+  description: Operazioni su una serie di cittadini.
 
 paths:
   /status_check/{codice_fiscale}:
     get:
-      description: verifica lo stato di un CITTADINO
+      description: Verifica lo stato di un CITTADINO
       operationId: status_check
       tags:
-      - cittadino
+      - Cittadino
       parameters:
         - name: codice_fiscale
           in: path
           required: true
-          description: codice fiscale del CITTADINO per cui è chiesta verifica dello stato
+          description: Codice fiscale del CITTADINO per cui è chiesta verifica dello stato
           schema:
             $ref: '#/components/schemas/Codice_Fiscale'
         - name: id_request
@@ -38,13 +43,9 @@ paths:
           schema:
             $ref: '#/components/schemas/ID_Request'
 
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
-
       responses:
         '200':
-          description: riscontro sullo stato del CITTADINO
+          description: Riscontro sullo stato del CITTADINO
           content:
             application/json:
               schema:
@@ -68,23 +69,19 @@ paths:
   /request_action/{codice_fiscale}:
     post:
       description: |-
-        richiesta di avvio azione di elezione, modifica o cancellazione
+        Richiesta di avvio azione di elezione, modifica o cancellazione
         volontaria del dominicio digitale di un CITTADINO
       operationId: request_action
       tags:
-      - cittadino
+      - Cittadino
 
       parameters:
         - name: codice_fiscale
           in: path
           required: true
-          description: codice fiscale del CITTADINO per cui è chiesta l'azione
+          description: Codice fiscale del CITTADINO per cui è chiesta l'azione
           schema:
             $ref: '#/components/schemas/Codice_Fiscale'
-
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
 
       requestBody:
         required: true
@@ -95,7 +92,7 @@ paths:
 
       responses:
         '200':
-          description: conferma di presa in carico dell'azione richiesta
+          description: Conferma di presa in carico dell'azione richiesta
           content:
             application/json:
               schema:
@@ -118,21 +115,19 @@ paths:
 
   /change_email/{codice_fiscale}:
     post:
-      description: richiesta di cambiamento email di contatto di un CITTADINO
+      description: Richiesta di cambiamento email di contatto di un CITTADINO
       operationId: change_email
       tags:
-      - cittadino
+      - Cittadino
 
       parameters:
         - name: codice_fiscale
           in: path
           required: true
-          description: codice fiscale del CITTADINO per cui è richiesto l'aggiornamento della email di contatto
+          description: Codice fiscale del CITTADINO per cui è richiesto l'aggiornamento della email di contatto
           schema:
             $ref: '#/components/schemas/Codice_Fiscale'
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
+            
       requestBody:
         required: true
         content:
@@ -141,7 +136,7 @@ paths:
               $ref: '#/components/schemas/NotifyEmail'
       responses:
         '200':
-            description: conferma di variazione dell'email di contatto del CITTADINO
+            description: Conferma di variazione dell'email di contatto del CITTADINO
             content:
               application/json:
                 schema:
@@ -163,16 +158,16 @@ paths:
           $ref: '#/components/responses/503'
   /recovers_changed_digital_addresses:
     get:
-      description: recupera variazioni domicili digitali digitali ad uno specifico giorno
+      description: Recupera variazioni domicili digitali digitali ad uno specifico giorno
       operationId: recovers_changed_digital_addresses
       tags:
-      - bulk
+      - Bulk
       parameters:
         - name: since
           in: query
           required: true
           description: |-
-            data di riferimento delle variazioni dei domicili digitali richieste
+            Data di riferimento delle variazioni dei domicili digitali richieste
           schema:
             type: string
             format: date
@@ -182,13 +177,9 @@ paths:
           schema:
             $ref: '#/components/schemas/ID_Request'
 
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
-
       responses:
         '200':
-          description: lista dei domicili digitali modificati nello specifico giorno
+          description: Lista dei domicili digitali modificati nello specifico giorno
           content:
             application/json:
               schema:
@@ -211,15 +202,15 @@ paths:
 
   /digital_address/{codice_fiscale}:
     get:
-      description: richiesta del domicilio digitale di un CITTADINO
+      description: Richiesta del domicilio digitale di un CITTADINO
       operationId: get_digital_address
       tags:
-      - cittadino
+      - Cittadino
       parameters:
         - name: codice_fiscale
           in: path
           required: true
-          description: codice fiscale del CITTADINO per cui è richiesto il domicilio digitale
+          description: Codice fiscale del CITTADINO per cui è richiesto il domicilio digitale
           schema:
             $ref: '#/components/schemas/Codice_Fiscale'
         - name: id_request
@@ -227,13 +218,10 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/ID_Request'
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
 
       responses:
         '200':
-            description: domicilio digitale del cittadino
+            description: Domicilio digitale del cittadino
             content:
               application/json:
                 schema:
@@ -260,16 +248,13 @@ paths:
         Richiede l'abbandono dell'applicazione IO per un CITTADINO.
       operationId: appIO_abandonment
       tags:
-      - cittadino
+      - Cittadino
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/AbbandonaIO'
-      security:
-        - bearerAuth: []
-          Agid-JWS-Signature: []
 
       responses:
         '200':
@@ -575,3 +560,6 @@ components:
         Header della firma di JWS.
         Il valore di questo header è una firma JWS.
         Vedere Modi  [integrity_rest_01] Integrità del payload del messaggio REST
+security:
+  - bearerAuth: []
+    Agid-JWS-Signature: []
