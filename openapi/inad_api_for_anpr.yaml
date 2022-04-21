@@ -20,9 +20,9 @@ servers:
     description: Generated server url
 tags:
 - name: Cittadino
-  description: Opeazioni su un singolo cittadino.
+  description: Operazioni su un singolo cittadino.
 - name: Bulk
-  description: Opeazioni su una serie di cittadini.
+  description: Operazioni su una serie di cittadini.
 paths:
   /status_check/{codice_fiscale}:
     get:
@@ -175,6 +175,22 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/ID_Request'
+        - name: offset
+          required: true
+          in: query
+          description: |-
+            The number of items to skip before returning the results
+          example: 0
+          schema:
+            $ref: '#/components/schemas/Offset'
+        - name: limit
+          required: true
+          in: query
+          description: |-
+            The number of items to return
+          example: 100
+          schema:
+            $ref: '#/components/schemas/Limit'
 
       responses:
         '200':
@@ -213,21 +229,22 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/ID_Request'
-        - name: page_number
+        - name: offset
           required: true
           in: query
           description: |-
-            The page number to request
+            The number of items to skip before returning the results
+          example: 0
           schema:
-            $ref: '#/components/schemas/Page_Number'
-        - name: page_size
+            $ref: '#/components/schemas/Offset'
+        - name: limit
           required: true
           in: query
           description: |-
-            The numbers of items to return
+            The number of items to return
           example: 100
           schema:
-            $ref: '#/components/schemas/Page_Size'
+            $ref: '#/components/schemas/Limit'
 
       responses:
         '200':
@@ -410,45 +427,36 @@ components:
         pattern: ^ANPR_[0-9]{8,8}_[0-9]{10,10}
         description: identificativo unico della request composto da ANPR come indicazione del sistema che ha effettuato la richiesta, aaaammdd data di riferimento e nnnnnnnnnn progressivo della richiesta
         
-    Page_Number:
+    Offset:
         type: integer
-        default: 0
-        description: Zero-based page index (0..N)
+        minimum: 0
+        description: The number of items to skip before returning the results
         
-    Page_Size:
+    Limit:
         type: integer
         minimum: 1
         maximum: 10000
-        description: The size of the page to be returned
+        description: The number of items to return
+        
+    Total_Element:
+        type: integer
+        example: 500
+        description: The total number of records in the list
         
     Pagination:
+      description: Offset-limit based pagination response
       type: object
       required:
-        - current_page
-        - page_size
-        - total_pages
+        - offset
+        - limit
         - total_elements
       properties:
-        current_page:
-          type: integer
-          format: int32
-          description: The current page in the list
-          example: 5
-        page_size:
-          type: integer
-          format: int32
-          description: The current page size
-          example: 20
-        total_pages:
-          type: integer
-          format: int32
-          description: The total number of pages in the list
-          example: 112
+        offset:
+          $ref: '#/components/schemas/Offset'
+        limit:
+          $ref: '#/components/schemas/Limit'
         total_elements:
-          type: integer
-          format: int32
-          description: The total number of records in the list
-          example: 500
+          $ref: '#/components/schemas/Total_Element'
 
     Codice_Fiscale:
       type: string
@@ -578,11 +586,14 @@ components:
       required:
         - id_request
         - list_changed_digital_address
+        - pagination
       properties:
         id_request:
           $ref: '#/components/schemas/ID_Request'
         list_changed_digital_address:
           $ref: '#/components/schemas/List_Changed_Digital_Address'
+        pagination:
+            $ref: '#/components/schemas/Pagination'
 
     List_Digital_Address:
       type: array
