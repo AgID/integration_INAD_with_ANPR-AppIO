@@ -16,7 +16,7 @@ info:
     url: https://creativecommons.org/licenses/by-nc-sa/4.0/
   version: 1.0.0
 servers:
-  - url: https://apiappio.inad.gov.it/rest/inad/v1/integration
+  - url: https://apiappio.inad.gov.it/rest/appio/v1/integration
     description: Generated server url
 tags:
 - name: Cittadino
