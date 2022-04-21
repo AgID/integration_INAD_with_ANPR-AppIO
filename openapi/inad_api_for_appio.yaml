@@ -176,6 +176,22 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/ID_Request'
+        - name: offset
+          required: true
+          in: query
+          description: |-
+            The number of items to skip before returning the results
+          example: 0
+          schema:
+            $ref: '#/components/schemas/Offset'
+        - name: limit
+          required: true
+          in: query
+          description: |-
+            The number of items to return
+          example: 100
+          schema:
+            $ref: '#/components/schemas/Limit'
 
       responses:
         '200':
@@ -184,6 +200,60 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response_List_Changed_Digital_Address'
+          headers:
+            Agid-JWS-Signature:
+              $ref: '#/components/headers/Agid-JWS-Signature'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        '503':
+          $ref: '#/components/responses/503'
+  
+  /sync_digital_addresses:
+    get:
+      operationId: sync_digital_addresses
+      tags:
+        - Bulk
+      description: |-
+        Recupera domicili digitali dei CITTADINI registrati in INAD a partire dall'identificativo di una particolare richiesta.
+
+      parameters:
+        - name: id_request
+          required: true
+          in: query
+          schema:
+            $ref: '#/components/schemas/ID_Request'
+        - name: offset
+          required: true
+          in: query
+          description: |-
+            The number of items to skip before returning the results
+          example: 0
+          schema:
+            $ref: '#/components/schemas/Offset'
+        - name: limit
+          required: true
+          in: query
+          description: |-
+            The number of items to return
+          example: 100
+          schema:
+            $ref: '#/components/schemas/Limit'
+
+      responses:
+        '200':
+          description: Lista dei domicili digitali eletti in INAD
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response_List_Digital_Address'
           headers:
             Agid-JWS-Signature:
               $ref: '#/components/headers/Agid-JWS-Signature'
@@ -275,8 +345,6 @@ paths:
           $ref: '#/components/responses/500'
         '503':
           $ref: '#/components/responses/503'
-
-
 
 components:
   headers:
@@ -398,6 +466,37 @@ components:
         type: string
         pattern: ^APPIO_[0-9]{8,8}_[0-9]{10,10}
         description: identificativo unico della request composto da APPIO come indicazione del sistema che ha effettuato la richiesta, aaaammdd data di riferimento e nnnnnnnnnn progressivo della richiesta
+
+    Offset:
+        type: integer
+        minimum: 0
+        description: The number of items to skip before returning the results
+        
+    Limit:
+        type: integer
+        minimum: 1
+        maximum: 10000
+        description: The number of items to return
+        
+    Total_Element:
+        type: integer
+        example: 500
+        description: The total number of records in the list
+        
+    Pagination:
+      description: Offset-limit based pagination response
+      type: object
+      required:
+        - offset
+        - limit
+        - total_elements
+      properties:
+        offset:
+          $ref: '#/components/schemas/Offset'
+        limit:
+          $ref: '#/components/schemas/Limit'
+        total_elements:
+          $ref: '#/components/schemas/Total_Element'
 
     Codice_Fiscale:
       type: string
@@ -539,11 +638,40 @@ components:
       required:
         - id_request
         - list_changed_digital_address
+        - pagination
       properties:
         id_request:
           $ref: '#/components/schemas/ID_Request'
         list_changed_digital_address:
           $ref: '#/components/schemas/List_Changed_Digital_Address'
+        pagination:
+            $ref: '#/components/schemas/Pagination'
+            
+    List_Digital_Address:
+      type: array
+      items:
+        type: object
+        required:
+          - codice_fiscale
+        properties:
+          codice_fiscale:
+            $ref: '#/components/schemas/Codice_Fiscale'
+          digital_address:
+            $ref: '#/components/schemas/Digital_Address'
+            
+    Response_List_Digital_Address:
+        type: object
+        required:
+          - id_request
+          - list_digital_address
+          - pagination
+        properties:
+          id_request:
+            $ref: '#/components/schemas/ID_Request'
+          list_digital_address:
+            $ref: '#/components/schemas/List_Digital_Address'
+          pagination:
+            $ref: '#/components/schemas/Pagination'
 
   securitySchemes:
     bearerAuth:
