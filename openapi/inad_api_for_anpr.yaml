@@ -16,7 +16,7 @@ info:
     url: https://creativecommons.org/licenses/by-nc-sa/4.0/
   version: 1.0.0
 servers:
-  - url: https://apianpr.inad.gov.it/rest/inad/v1/integration
+  - url: https://apianpr.inad.gov.it/rest/anpr/v1/integration
     description: Generated server url
 tags:
 - name: Cittadino
