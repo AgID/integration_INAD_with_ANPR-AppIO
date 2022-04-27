@@ -560,7 +560,7 @@ components:
           digital_address:
             $ref: '#/components/schemas/Digital_Address'
 
-    Response_List_Digital_Address:
+   Response_List_Digital_Address:
         type: object
         required:
           - id_request
@@ -569,8 +569,22 @@ components:
           id_request:
             $ref: '#/components/schemas/ID_Request'
           list_digital_address:
-            $ref: '#/components/schemas/List_Digital_Address'
-
+            type: array
+            items:
+              $ref: '#/components/schemas/Element_Digital_Address'
+              
+    Element_Digital_Address:
+      type: object
+      required:
+        - codice_fiscale
+        - digital_address
+      properties:
+        codice_fiscale:
+          $ref: '#/components/schemas/Codice_Fiscale'
+        digital_address:
+          $ref: '#/components/schemas/Digital_Address'
+      description: Modello di risposta per singolo Domicilio Digitale
+     
   securitySchemes:
     bearerAuth:
       scheme: bearer
