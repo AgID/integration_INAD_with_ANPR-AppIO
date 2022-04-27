@@ -172,6 +172,7 @@ paths:
             format: date
             example: '2020-01-01'
         - name: id_request
+          required: true
           in: query
           schema:
             $ref: '#/components/schemas/ID_Request'
