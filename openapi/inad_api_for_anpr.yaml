@@ -603,18 +603,6 @@ components:
         pagination:
             $ref: '#/components/schemas/Pagination'
 
-    List_Digital_Address:
-      type: array
-      items:
-        type: object
-        required:
-          - codice_fiscale
-        properties:
-          codice_fiscale:
-            $ref: '#/components/schemas/Codice_Fiscale'
-          digital_address:
-            $ref: '#/components/schemas/Digital_Address'
-
    Response_List_Digital_Address:
         type: object
         required:
