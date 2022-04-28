@@ -649,17 +649,17 @@ components:
         pagination:
             $ref: '#/components/schemas/Pagination'
             
-    List_Digital_Address:
-      type: array
-      items:
+    Element_Digital_Address:            
+        description: Modello di risposta per singolo Domicilio Digitale            
+        properties:            
+          codice_fiscale:            
+            $ref: '#/components/schemas/CodiceFiscale'            
+          digital_address:            
+            $ref: '#/components/schemas/Digital_Address'            
+        required:            
+          - codice_fiscale            
+          - digital_address            
         type: object
-        required:
-          - codice_fiscale
-        properties:
-          codice_fiscale:
-            $ref: '#/components/schemas/Codice_Fiscale'
-          digital_address:
-            $ref: '#/components/schemas/Digital_Address'
             
     Response_List_Digital_Address:
         type: object
@@ -670,8 +670,9 @@ components:
         properties:
           id_request:
             $ref: '#/components/schemas/ID_Request'
-          list_digital_address:
-            $ref: '#/components/schemas/List_Digital_Address'
+          items:            
+            $ref: '#/components/schemas/Element_Digital_Address'            
+            type: array
           pagination:
             $ref: '#/components/schemas/Pagination'
 
