@@ -616,24 +616,23 @@ components:
         id_request:
           $ref: '#/components/schemas/ID_Request'
 
-    List_Changed_Digital_Address:
-      type: array
-      items:
-        type: object
-        required:
-          - codice_fiscale
-          - action
-        properties:
-          codice_fiscale:
-            $ref: '#/components/schemas/Codice_Fiscale'
-          digital_address:
-            $ref: '#/components/schemas/Digital_Address'
-          action:
-            type: string
-            enum:
-              - insert
-              - update
-              - delete
+     Changed_Digital_Address:
+      required:
+        - action
+        - codice_fiscale
+      type: object
+      properties:
+        codice_fiscale:
+          $ref: '#/components/schemas/CodiceFiscale'
+        digital_address:
+          $ref: '#/components/schemas/Digital_Address'
+        action:
+          type: string
+          enum:
+            - INSERT
+            - UPDATE
+            - DELETE
+      description: Modello di risposta per Elenco Domicili 
 
     Response_List_Changed_Digital_Address:
       type: object
@@ -645,7 +644,9 @@ components:
         id_request:
           $ref: '#/components/schemas/ID_Request'
         list_changed_digital_address:
-          $ref: '#/components/schemas/List_Changed_Digital_Address'
+          type: array
+          items:
+            $ref: '#/components/schemas/Changed_Digital_Address'
         pagination:
             $ref: '#/components/schemas/Pagination'
             
