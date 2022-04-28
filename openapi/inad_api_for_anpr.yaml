@@ -172,6 +172,7 @@ paths:
             format: date
             example: '2020-01-01'
         - name: id_request
+          required: true
           in: query
           schema:
             $ref: '#/components/schemas/ID_Request'
@@ -280,20 +281,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              additionalProperties: false
-              description: |-
-                Una notifica di decesso del CITTADINO.
-                Poiché non c'è un metodo GET associato a questo path,
-                conviene inviare le informazioni tramite il payload.
-              required:
-                - codice_fiscale
-                - id_request
-              properties:
-                codice_fiscale:
-                  $ref: '#/components/schemas/Codice_Fiscale'
-                id_request:
-                  $ref: '#/components/schemas/ID_Request'
+              $ref: '#/components/schemas/NotifyDeath'
 
       responses:
         '200':
@@ -408,6 +396,23 @@ components:
           description: Descrizione di dettaglio dello specifico problema verificatosi
           example: <detail_error>
       description: Modello di risposta in caso di errore
+
+    NotifyDeath:
+      type: object
+      additionalProperties: false
+      description: |-
+        Una notifica di decesso del CITTADINO.
+        Poiché non c'è un metodo GET associato a questo path,
+        conviene inviare le informazioni tramite il payload.
+      required:
+        - codice_fiscale
+        - id_request
+      properties:
+        codice_fiscale:
+          $ref: '#/components/schemas/Codice_Fiscale'
+        id_request:
+          $ref: '#/components/schemas/ID_Request'
+
     NotifyEmail:
       type: object
       additionalProperties: false
