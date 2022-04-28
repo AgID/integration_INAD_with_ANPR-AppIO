@@ -404,24 +404,25 @@ components:
             $ref: '#/components/schemas/Errore'
   schemas:
     Errore:
-      required:
-        - status
-        - title
-      type: object
-      additionalProperties: false
       description: Modello di risposta in caso di errore
       properties:
-        status:
-          type: integer
-          format: int32
-          description: Codice di errore
-          example: 400
-          maximum: 600
-          minimum: 100
-        title:
+        detail:
+          description: Descrizione di dettaglio dello specifico problema verificatosi
+          example: <detail_error>
           type: string
+        status:
+          description: Codice di errore
+          enum:
+            - '400'
+            - '401'
+            - '403'
+            - '404'
+            - '500'
+            - '503'
+          example: <HTTP_CODE>
+          type: string
+        type:
           description: Tipologia di errore
-          example: BAD_REQUEST
           enum:
             - BAD_REQUEST
             - UNAUTHORIZED
@@ -429,11 +430,12 @@ components:
             - NOT_FOUND
             - INTERNAL_SERVER_ERROR
             - SERVICE_UNAVAILABLE
-        detail:
+          example: <HTTP_STATUS>
           type: string
-          description: Descrizione di dettaglio dello specifico problema verificatosi
-          example: <detail_error>
-          maxLength: 1024
+      required:
+        - status
+        - type
+      type: object
     AbbandonaIO:
       type: object
       additionalProperties: false
