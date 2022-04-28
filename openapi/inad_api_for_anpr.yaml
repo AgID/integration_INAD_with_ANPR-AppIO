@@ -603,19 +603,7 @@ components:
         pagination:
             $ref: '#/components/schemas/Pagination'
 
-    List_Digital_Address:
-      type: array
-      items:
-        type: object
-        required:
-          - codice_fiscale
-        properties:
-          codice_fiscale:
-            $ref: '#/components/schemas/Codice_Fiscale'
-          digital_address:
-            $ref: '#/components/schemas/Digital_Address'
-
-    Response_List_Digital_Address:
+   Response_List_Digital_Address:
         type: object
         required:
           - id_request
@@ -625,9 +613,23 @@ components:
           id_request:
             $ref: '#/components/schemas/ID_Request'
           list_digital_address:
-            $ref: '#/components/schemas/List_Digital_Address'
+            type: array
+            items:
+              $ref: '#/components/schemas/Element_Digital_Address'
           pagination:
-            $ref: '#/components/schemas/Pagination'
+           $ref: '#/components/schemas/Pagination'
+              
+    Element_Digital_Address:
+      type: object
+      required:
+        - codice_fiscale
+        - digital_address
+      properties:
+        codice_fiscale:
+          $ref: '#/components/schemas/Codice_Fiscale'
+        digital_address:
+          $ref: '#/components/schemas/Digital_Address'
+      description: Modello di risposta per singolo Domicilio Digitale
 
   securitySchemes:
     bearerAuth:
@@ -636,7 +638,6 @@ components:
       type: http
       description: |-
         Implementazione conforme ad RFC8725.
-        Contiene il JWT recuperato da PDND interoperabilità applicando le Linee Guida sull’infrastruttura tecnologica della Piattaforma Digitale Nazionale Dati per l’interoperabilità dei sistemi informativi e delle basi di dati ai sensi dell’articolo 50-ter, comma 2 del CAD 
     Agid-JWS-Signature:
       type: apiKey
       in: header
