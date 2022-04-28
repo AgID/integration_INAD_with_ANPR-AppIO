@@ -363,25 +363,27 @@ components:
           schema:
             $ref: '#/components/schemas/Errore'
   schemas:
-    Errore:
+     Errore:
       required:
         - status
-        - title
-      type: object
-      additionalProperties: false
-      description: Modello di risposta in caso di errore
+        - type
+      type: object					
       properties:
         status:
-          type: integer
-          format: int32
+          type: string
           description: Codice di errore
-          example: 400
-          maximum: 600
-          minimum: 100
-        title:
+          example: <HTTP_CODE>
+          enum:
+            - '400'
+            - '401'
+            - '403'
+            - '404'
+            - '500'
+            - '503'
+        type:
           type: string
           description: Tipologia di errore
-          example: BAD_REQUEST
+          example: <HTTP_STATUS>
           enum:
             - BAD_REQUEST
             - UNAUTHORIZED
@@ -393,7 +395,8 @@ components:
           type: string
           description: Descrizione di dettaglio dello specifico problema verificatosi
           example: <detail_error>
-          maxLength: 1024
+      description: Modello di risposta in caso di errore
+
     NotifyDeath:
       type: object
       additionalProperties: false
@@ -409,6 +412,7 @@ components:
           $ref: '#/components/schemas/Codice_Fiscale'
         id_request:
           $ref: '#/components/schemas/ID_Request'
+
     NotifyEmail:
       type: object
       additionalProperties: false
