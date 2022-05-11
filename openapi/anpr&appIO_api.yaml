@@ -115,16 +115,24 @@ paths:
 
   /receive_changed_digital_addresses:
     post:
-      description: ricevi variazioni di domicili digitali delle ultime 24h
+      description: ricevi disponibilità variazioni di domicili digitali delle ultime 24h
       operationId: receive_changed_digital_addresses
       tags:
       - bulk
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Response_List_Changed_Digital_Address'
+      parameters:
+        - name: since
+          in: query
+          required: true
+          description: |-
+            Data di riferimento delle variazioni dei domicili digitali disponibile
+          schema:
+            type: string
+            format: date
+            example: '2020-01-01'
+        - name: id_request
+          in: query
+          schema:
+            $ref: '#/components/schemas/ID_Request'
 
       security:
         - bearerAuth: []
@@ -351,35 +359,6 @@ components:
         - officeCancellation
         - after30dd
         - specialCaseCancellation
-
-    List_Changed_Digital_Address:
-      type: array
-      items:
-        type: object
-        required:
-          - codice_fiscale
-          - action
-        properties:
-          codice_fiscale:
-            $ref: '#/components/schemas/Codice_Fiscale'
-          digital_address:
-            $ref: '#/components/schemas/Digital_Address'
-          action:
-            type: string
-            enum:
-              - insert
-              - update
-              - delete
-    Response_List_Changed_Digital_Address:
-      type: object
-      required:
-        - id_request
-        - list_changed_digital_address
-      properties:
-        id_request:
-          $ref: '#/components/schemas/ID_Request'
-        list_changed_digital_address:
-          $ref: '#/components/schemas/List_Changed_Digital_Address'
 
   securitySchemes:
     bearerAuth:
