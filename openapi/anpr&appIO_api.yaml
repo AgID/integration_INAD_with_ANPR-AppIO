@@ -122,9 +122,9 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+        application/json:
             schema:
-              $ref: '#/components/schemas/Response_List_Changed_Digital_Address'
+              $ref: '#/components/schemas/NotifyChangedDigitalAddresses'
 
       security:
         - bearerAuth: []
@@ -352,34 +352,16 @@ components:
         - after30dd
         - specialCaseCancellation
 
-    List_Changed_Digital_Address:
-      type: array
-      items:
-        type: object
-        required:
-          - codice_fiscale
-          - action
-        properties:
-          codice_fiscale:
-            $ref: '#/components/schemas/Codice_Fiscale'
-          digital_address:
-            $ref: '#/components/schemas/Digital_Address'
-          action:
-            type: string
-            enum:
-              - insert
-              - update
-              - delete
-    Response_List_Changed_Digital_Address:
+  NotifyChangedDigitalAddresses:
       type: object
       required:
-        - id_request
-        - list_changed_digital_address
+       - id_request
+       - validity
       properties:
         id_request:
-          $ref: '#/components/schemas/ID_Request'
-        list_changed_digital_address:
-          $ref: '#/components/schemas/List_Changed_Digital_Address'
+           $ref: '#/components/schemas/ID_Request'
+        validity:
+            type: boolean
 
   securitySchemes:
     bearerAuth:
