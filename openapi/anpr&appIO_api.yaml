@@ -119,20 +119,13 @@ paths:
       operationId: receive_changed_digital_addresses
       tags:
       - bulk
-      parameters:
-        - name: since
-          in: query
-          required: true
-          description: |-
-            Data di riferimento delle variazioni dei domicili digitali disponibile
-          schema:
-            type: string
-            format: date
-            example: '2020-01-01'
-        - name: id_request
-          in: query
-          schema:
-            $ref: '#/components/schemas/ID_Request'
+     
+      requestBody:
+        required: true
+        content:
+         application/json:
+            schema:
+              $ref: '#/components/schemas/NotifyChangedDigitalAddresses'
 
       security:
         - bearerAuth: []
@@ -360,6 +353,22 @@ components:
         - after30dd
         - specialCaseCancellation
 
+    NotifyChangedDigitalAddresses:
+      type: object
+      required:
+       - id_request
+       - since
+       - total_element
+      properties:
+        id_request:
+           $ref: '#/components/schemas/ID_Request'
+        since:
+            type: string
+            format: date
+            example: '2020-01-01'
+        total_element:
+          type: integer
+            
   securitySchemes:
     bearerAuth:
       scheme: bearer
