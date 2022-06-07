@@ -359,6 +359,7 @@ components:
         format: JWS
         maxLength: 4096
         example: eyJzd.fafa.fafafa
+
   responses:
     '400':
       description: BAD_REQUEST
@@ -396,7 +397,7 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Errore'
-  schemas:
+  schemas:    
     Errore:
       description: Modello di risposta in caso di errore
       properties:
@@ -610,14 +611,14 @@ components:
         id_request:
           $ref: '#/components/schemas/ID_Request'
 
-     Changed_Digital_Address:
+    Changed_Digital_Address:
       required:
         - action
         - codice_fiscale
       type: object
       properties:
         codice_fiscale:
-          $ref: '#/components/schemas/CodiceFiscale'
+          $ref: '#/components/schemas/Codice_Fiscale'
         digital_address:
           $ref: '#/components/schemas/Digital_Address'
         action:
@@ -648,7 +649,7 @@ components:
         description: Modello di risposta per singolo Domicilio Digitale            
         properties:            
           codice_fiscale:            
-            $ref: '#/components/schemas/CodiceFiscale'            
+            $ref: '#/components/schemas/Codice_Fiscale'            
           digital_address:            
             $ref: '#/components/schemas/Digital_Address'            
         required:            

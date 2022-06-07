@@ -363,11 +363,11 @@ components:
           schema:
             $ref: '#/components/schemas/Errore'
   schemas:
-     Errore:
+    Errore:      
       required:
         - status
         - type
-      type: object					
+      type: object
       properties:
         status:
           type: string
@@ -603,7 +603,7 @@ components:
         pagination:
             $ref: '#/components/schemas/Pagination'
 
-   Response_List_Digital_Address:
+    Response_List_Digital_Address:
         type: object
         required:
           - id_request
