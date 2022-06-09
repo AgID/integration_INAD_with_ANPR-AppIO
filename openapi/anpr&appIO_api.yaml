@@ -41,7 +41,7 @@ paths:
               $ref: '#/components/schemas/NotifyStatus'
       security:
         - bearerAuth: []
-          Agid-JWS-Signature: []
+          Agid-JWT-Signature: []
       responses:
         '200':
           description: aggiornamento effettuato
@@ -50,8 +50,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ACK'
           headers:
-            Agid-JWS-Signature:
-              $ref: '#/components/headers/Agid-JWS-Signature'
+            Agid-JWT-Signature:
+              $ref: '#/components/headers/Agid-JWT-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -88,7 +88,7 @@ paths:
 
       security:
         - bearerAuth: []
-          Agid-JWS-Signature: []
+          Agid-JWT-Signature: []
 
       responses:
         '200':
@@ -98,8 +98,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ACK'
           headers:
-            Agid-JWS-Signature:
-              $ref: '#/components/headers/Agid-JWS-Signature'
+            Agid-JWT-Signature:
+              $ref: '#/components/headers/Agid-JWT-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -129,7 +129,7 @@ paths:
 
       security:
         - bearerAuth: []
-          Agid-JWS-Signature: []
+          Agid-JWT-Signature: []
 
       responses:
         '200':
@@ -139,8 +139,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ACK'
           headers:
-            Agid-JWS-Signature:
-              $ref: '#/components/headers/Agid-JWS-Signature'
+            Agid-JWT-Signature:
+              $ref: '#/components/headers/Agid-JWT-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -157,11 +157,9 @@ paths:
 
 components:
   headers:
-    Agid-JWS-Signature:
+    Agid-JWT-Signature:
       description: |-
-        L'header Agid-JWS-Signature è un JWS (JSON Web Signature) che contiene una firma digitale
-        associata al messaggio scambiato.
-        Vedi il pattern di sicurezza [INTEGRITY_REST_01] del MoDI
+       Vedi Modi [integrity_rest_01] Integrità del payload del messaggio REST
 
       schema:
         type: string
@@ -376,11 +374,9 @@ components:
       type: http
       description: |-
         Implementazione conforme ad RFC8725.
-    Agid-JWS-Signature:
+    Agid-JWT-Signature:
       type: apiKey
       in: header
-      name: Agid-JWS-Signature
+      name: Agid-JWT-Signature
       description: |-
-        Header della firma di JWS.
-        Il valore di questo header è una firma JWS.
-        Vedere Modi  [integrity_rest_01] Integrità del payload del messaggio REST
+        Vedi Modi [integrity_rest_01] Integrità del payload del messaggio REST
