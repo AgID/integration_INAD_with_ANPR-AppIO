@@ -51,8 +51,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Response_Citizen_Status'
           headers:
-            Agid-JWS-Signature:
-              $ref: '#/components/headers/Agid-JWS-Signature'
+            Agid-JWT-Signature:
+              $ref: '#/components/headers/Agid-JWT-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -98,8 +98,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Response_Effect_Action'
           headers:
-            Agid-JWS-Signature:
-              $ref: '#/components/headers/Agid-JWS-Signature'
+            Agid-JWT-Signature:
+              $ref: '#/components/headers/Agid-JWT-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -142,8 +142,8 @@ paths:
                 schema:
                   $ref: '#/components/schemas/ACK'
             headers:
-              Agid-JWS-Signature:
-                $ref: '#/components/headers/Agid-JWS-Signature'
+              Agid-JWT-Signature:
+                $ref: '#/components/headers/Agid-JWT-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -201,8 +201,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Response_List_Changed_Digital_Address'
           headers:
-            Agid-JWS-Signature:
-              $ref: '#/components/headers/Agid-JWS-Signature'
+            Agid-JWT-Signature:
+              $ref: '#/components/headers/Agid-JWT-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -255,8 +255,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Response_List_Digital_Address'
           headers:
-            Agid-JWS-Signature:
-              $ref: '#/components/headers/Agid-JWS-Signature'
+            Agid-JWT-Signature:
+              $ref: '#/components/headers/Agid-JWT-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -297,8 +297,8 @@ paths:
                 schema:
                   $ref: '#/components/schemas/Response_Digital_Address'
             headers:
-              Agid-JWS-Signature:
-                $ref: '#/components/headers/Agid-JWS-Signature'
+              Agid-JWT-Signature:
+                $ref: '#/components/headers/Agid-JWT-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -348,17 +348,16 @@ paths:
 
 components:
   headers:
-    Agid-JWS-Signature:
+    Agid-JWT-Signature:
       description: |-
-        L'header Agid-JWS-Signature è un JWS (JSON Web Signature) che contiene una firma digitale
-        associata al messaggio scambiato.
-        Vedi il pattern di sicurezza [INTEGRITY_REST_01] del MoDI
+        Vedi Modi [integrity_rest_01] Integrità del payload del messaggio REST
 
       schema:
         type: string
         format: JWS
         maxLength: 4096
         example: eyJzd.fafa.fafafa
+
   responses:
     '400':
       description: BAD_REQUEST
@@ -396,7 +395,7 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Errore'
-  schemas:
+  schemas:    
     Errore:
       description: Modello di risposta in caso di errore
       properties:
@@ -610,14 +609,14 @@ components:
         id_request:
           $ref: '#/components/schemas/ID_Request'
 
-     Changed_Digital_Address:
+    Changed_Digital_Address:
       required:
         - action
         - codice_fiscale
       type: object
       properties:
         codice_fiscale:
-          $ref: '#/components/schemas/CodiceFiscale'
+          $ref: '#/components/schemas/Codice_Fiscale'
         digital_address:
           $ref: '#/components/schemas/Digital_Address'
         action:
@@ -648,7 +647,7 @@ components:
         description: Modello di risposta per singolo Domicilio Digitale            
         properties:            
           codice_fiscale:            
-            $ref: '#/components/schemas/CodiceFiscale'            
+            $ref: '#/components/schemas/Codice_Fiscale'            
           digital_address:            
             $ref: '#/components/schemas/Digital_Address'            
         required:            
@@ -678,14 +677,13 @@ components:
       type: http
       description: |-
         Implementazione conforme ad RFC8725.
-    Agid-JWS-Signature:
+    Agid-JWT-Signature:
       type: apiKey
       in: header
-      name: Agid-JWS-Signature
+      name: Agid-JWT-Signature
       description: |-
-        Header della firma di JWS.
-        Il valore di questo header è una firma JWS.
-        Vedere Modi  [integrity_rest_01] Integrità del payload del messaggio REST
+       Vedi Modi [integrity_rest_01] Integrità del payload del messaggio REST
+       
 security:
   - bearerAuth: []
-    Agid-JWS-Signature: []
+    Agid-JWT-Signature: []
