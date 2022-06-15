@@ -146,12 +146,11 @@ components:
   headers:
     Agid-JWT-Signature:
       description: |-
-        L'header Agid-JWT-Signature è un JWS (JSON Web Signature) che contiene una firma digitale
-        associata al messaggio scambiato.
-        Vedi il pattern di sicurezza [INTEGRITY_REST_01] del MoDI
+        Vedi Modi [integrity_rest_01] Integrità del payload del messaggio REST
+
       schema:
         type: string
-        format: JWS
+        format: JWT
         maxLength: 4096
         example: eyJzd.fafa.fafafa
   responses:
@@ -371,6 +370,4 @@ components:
       in: header
       name: Agid-JWT-Signature
       description: |-
-        Header della firma di JWS.
-        Il valore di questo header è una firma JWS.
-        Vedere Modi  [integrity_rest_01] Integrità del payload del messaggio REST
+        Vedi Modi [integrity_rest_01] Integrità del payload del messaggio REST
