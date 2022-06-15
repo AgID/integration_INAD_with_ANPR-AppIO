@@ -146,7 +146,7 @@ components:
   headers:
     Agid-JWT-Signature:
       description: |-
-        Vedi Modi [integrity_rest_01] Integrità del payload del messaggio REST
+       Vedi Modi [integrity_rest_01] Integrità del payload del messaggio REST
 
       schema:
         type: string
