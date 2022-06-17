@@ -523,10 +523,10 @@ components:
     Operation:
       type: string
       enum:
-        - registration&insert
-        - insert
-        - update
-        - delete
+        - REGISTRATION_AND_INSERT
+        - INSERT
+        - UPDATE
+        - DELETE
 
     Email:
       type: string
