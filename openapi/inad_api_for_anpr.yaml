@@ -576,7 +576,9 @@ components:
         codice_fiscale:
           $ref: '#/components/schemas/Codice_Fiscale'
         digital_address:
-          $ref: '#/components/schemas/Digital_Address'
+          $ref: '#/components/schemas/Digital_Address'        
+        email:
+            $ref: '#/components/schemas/Email'        
         action:
           type: string
           enum:
@@ -626,7 +628,9 @@ components:
         codice_fiscale:
           $ref: '#/components/schemas/Codice_Fiscale'
         digital_address:
-          $ref: '#/components/schemas/Digital_Address'
+          $ref: '#/components/schemas/Digital_Address'      
+        email:
+            $ref: '#/components/schemas/Email'
       description: Modello di risposta per singolo Domicilio Digitale
 
   securitySchemes:

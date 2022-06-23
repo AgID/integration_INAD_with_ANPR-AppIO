@@ -156,6 +156,7 @@ paths:
           $ref: '#/components/responses/500'
         '503':
           $ref: '#/components/responses/503'
+  
   /recovers_changed_digital_addresses:
     get:
       description: Recupera variazioni domicili digitali digitali ad uno specifico giorno
@@ -618,7 +619,9 @@ components:
         codice_fiscale:
           $ref: '#/components/schemas/Codice_Fiscale'
         digital_address:
-          $ref: '#/components/schemas/Digital_Address'
+          $ref: '#/components/schemas/Digital_Address'        
+        email:
+            $ref: '#/components/schemas/Email'
         action:
           type: string
           enum:
@@ -644,31 +647,33 @@ components:
             $ref: '#/components/schemas/Pagination'
             
     Element_Digital_Address:            
-        description: Modello di risposta per singolo Domicilio Digitale            
-        properties:            
-          codice_fiscale:            
-            $ref: '#/components/schemas/Codice_Fiscale'            
-          digital_address:            
-            $ref: '#/components/schemas/Digital_Address'            
-        required:            
-          - codice_fiscale            
-          - digital_address            
-        type: object
+      description: Modello di risposta per singolo Domicilio Digitale            
+      properties:            
+        codice_fiscale:            
+          $ref: '#/components/schemas/Codice_Fiscale'            
+        digital_address:            
+          $ref: '#/components/schemas/Digital_Address'         
+        email:
+          $ref: '#/components/schemas/Email'      
+      required:            
+        - codice_fiscale            
+        - digital_address            
+      type: object
             
     Response_List_Digital_Address:
-        type: object
-        required:
-          - id_request
-          - list_digital_address
-          - pagination
-        properties:
-          id_request:
-            $ref: '#/components/schemas/ID_Request'
-          items:            
-            $ref: '#/components/schemas/Element_Digital_Address'            
-            type: array
-          pagination:
-            $ref: '#/components/schemas/Pagination'
+      type: object
+      required:
+        - id_request
+        - list_digital_address
+        - pagination
+      properties:
+        id_request:
+          $ref: '#/components/schemas/ID_Request'
+        items:            
+          $ref: '#/components/schemas/Element_Digital_Address'            
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
 
   securitySchemes:
     bearerAuth:
