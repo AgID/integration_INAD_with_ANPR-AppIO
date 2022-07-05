@@ -509,6 +509,7 @@ components:
         - awaitingPublication
         - waitingOfficeCancellation
         - digitalDomicilePresent
+        - waitingVoluntaryCancellation
 
     Response_Citizen_Status:
       type: object
