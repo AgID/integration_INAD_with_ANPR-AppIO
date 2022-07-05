@@ -292,6 +292,7 @@ components:
         - awaitingPublication
         - waitingOfficeCancellation
         - digitalDomicilePresent
+        - waitingVoluntaryCancellation
 
     Email:
       type: string
