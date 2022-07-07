@@ -134,7 +134,7 @@ paths:
               $ref: '#/components/schemas/NotifyEmail'
       responses:
         '200':
-            description: Conferma di variazione dell'email di contatto del CITTADINO
+            description: notifica ricevuta
             content:
               application/json:
                 schema:
@@ -285,7 +285,7 @@ paths:
 
       responses:
         '200':
-            description: presa in carico
+            description: notifica ricevuta
             content:
               application/json:
                 schema:
@@ -318,12 +318,6 @@ components:
         maxLength: 4096
         example: eyJzd.fafa.fafafa
   responses:
-    NotificaRicevuta:
-      description: Notifica ricevuta correttamente.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ACK'
     '400':
       description: BAD_REQUEST
       content:
@@ -564,7 +558,7 @@ components:
         description:
           type: string
           enum:
-            - chargeMade
+            - notificationReceived
         id_request:
           $ref: '#/components/schemas/ID_Request'
 

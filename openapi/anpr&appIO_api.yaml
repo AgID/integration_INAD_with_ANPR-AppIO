@@ -38,7 +38,7 @@ paths:
           Agid-JWT-Signature: []
       responses:
         '200':
-          description: aggiornamento effettuato
+          description: notifica ricevuta
           content:
             application/json:
               schema:
@@ -79,7 +79,7 @@ paths:
 
       responses:
         '200':
-          description: aggiornamento effettuato
+          description: notifica ricevuta
           content:
             application/json:
               schema:
@@ -120,7 +120,7 @@ paths:
 
       responses:
         '200':
-          description: aggiornamento effettuato
+          description: notifica ricevuta
           content:
             application/json:
               schema:
@@ -154,12 +154,6 @@ components:
         maxLength: 4096
         example: eyJzd.fafa.fafafa
   responses:
-    NotificaRicevuta:
-      description: Notifica ricevuta correttamente.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ACK'
     '400':
       description: BAD_REQUEST
       content:
@@ -275,7 +269,7 @@ components:
     ID_Request:
         type: string
         pattern: ^INAD_[0-9]{8,8}_[0-9]{10,10}
-        description: identificativo unico della request composto da ANPR come indicazione del sistema che ha effettuato la richiesta, aaaammdd data di riferimento e nnnnnnnnnn progressivo della richiesta
+        description: identificativo unico della request composto da INAD come indicazione del sistema che ha effettuato la richiesta, aaaammdd data di riferimento e nnnnnnnnnn progressivo della richiesta
 
     Codice_Fiscale:
       type: string
@@ -314,7 +308,7 @@ components:
         description:
           type: string
           enum:
-            - chargeMade
+            - notificationReceived
         id_request:
           $ref: '#/components/schemas/ID_Request'
 

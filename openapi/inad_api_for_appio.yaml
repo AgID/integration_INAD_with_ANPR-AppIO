@@ -136,7 +136,7 @@ paths:
               $ref: '#/components/schemas/NotifyEmail'
       responses:
         '200':
-            description: Conferma di variazione dell'email di contatto del CITTADINO
+            description: notifica ricevuta
             content:
               application/json:
                 schema:
@@ -329,11 +329,14 @@ paths:
 
       responses:
         '200':
-            description: Conferma l'abbandono dell'applicazione IO.
+            description: notifica ricevuta
             content:
               application/json:
                 schema:
                   $ref: '#/components/schemas/ACK'
+            headers:
+              Agid-JWT-Signature:
+                $ref: '#/components/headers/Agid-JWT-Signature'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -607,7 +610,7 @@ components:
         description:
           type: string
           enum:
-            - chargeMade
+            - notificationReceived
         id_request:
           $ref: '#/components/schemas/ID_Request'
 
