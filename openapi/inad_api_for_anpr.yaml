@@ -106,10 +106,13 @@ paths:
           $ref: '#/components/responses/403'
         '404':
           $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
         '500':
           $ref: '#/components/responses/500'
         '503':
           $ref: '#/components/responses/503'
+        
 
   /change_email/{codice_fiscale}:
     post:
@@ -342,6 +345,12 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Errore'
+    '422':
+      description: UNPROCESSABLE ENTITY
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Errore'            
     '500':
       description: INTERNAL_SERVER_ERROR
       content:
@@ -354,6 +363,7 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Errore'
+    
   schemas:
     Errore:      
       required:
@@ -370,6 +380,7 @@ components:
             - '401'
             - '403'
             - '404'
+            - '422'
             - '500'
             - '503'
         type:
@@ -381,6 +392,7 @@ components:
             - UNAUTHORIZED
             - FORBIDDEN
             - NOT_FOUND
+            - UNPROCESSABLE ENTITY
             - INTERNAL_SERVER_ERROR
             - SERVICE_UNAVAILABLE
         detail:
